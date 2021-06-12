@@ -1,0 +1,121 @@
+﻿@model COEADGroupManager.Models.DirectorySearchIndexViewModel
+
+@{
+
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+
+    <div class="row">
+
+        <div class="col-md-12 col-lg-8">
+
+            <h4 class="coeH4">Directory Search:</h4>
+
+            <strong>Search for: </strong>
+            <br />
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-5 col-lg-3">
+
+            @Html.TextBoxFor(x => x.uSearchTerm, new { @class = "coeInputs form-control" })
+            <br />
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-8 col-lg-5">
+
+            <button type="submit" name="btn1" value="Search" class="btn btn-default coeInputs">Search</button>
+
+           
+            &nbsp;
+            @Html.ValidationMessageFor(x => x.uSearchTerm)
+
+        </div>
+
+    </div>
+
+
+
+
+    <div class="row">
+
+        <div class="col-md-12 col-lg-11">
+
+            @if (Model.rsltCollection != null)
+            {
+
+
+                if (Model.rsltCollection.lResults != null && Model.rsltCollection.lResults.Count() > 0)
+                {
+                    <br />
+
+                    if (Model.rsltCollection.lResults.Count() >= 100)
+                    {
+                        <p>Search returned more than a 100 results. Showing first 100.</p>
+                    }
+                    else
+                    {
+                        <p>Search returned @Model.rsltCollection.lResults.Count.ToString() results.</p>
+                    }
+
+
+                    <table id="tblSearchAD" class="table table-striped table-bordered table-condensed">
+
+                        <thead>
+                            <tr>
+                                <th class="text-left"><strong>Login</strong></th>
+                                <th class="text-left"><strong>Display Name</strong></th>
+                                <th class="text-left"><strong>Email Address</strong></th>
+                                <th class="text-left"><strong>Title</strong></th>
+                                <th class="text-left"><strong>Department</strong></th>
+                                <th class="text-left"><strong>Enabled</strong></th>
+                            </tr>
+                        </thead>
+
+                        @foreach (var uFR in Model.rsltCollection.lResults.OrderBy(r => r.display_name))
+                        {
+                            <tr>
+                                <td class="text-left">@uFR.user_id</td>
+                                <td class="text-left">@uFR.display_name</td>
+                                <td class="text-left">@uFR.email_address</td>
+                                <td class="text-left">@uFR.title</td>
+                                <td class="text-left">@uFR.department</td>
+                                <td class="text-left">@uFR.ad_enabled</td>
+                            </tr>
+
+                        }
+
+                    </table>
+
+                }
+                else
+                {
+                    <br /><br />
+                    <p>No results were found using search term.</p>
+                }
+
+            }
+
+
+        </div>
+
+    </div>
+
+
+}
+

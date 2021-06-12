@@ -1,0 +1,44 @@
+﻿@model COEADGroupManager.Models.ManagersGroupAddViewModel
+
+@using (Ajax.BeginForm("addmanager", "managers", FormMethod.Post,
+                    new AjaxOptions
+                    {
+                        InsertionMode = InsertionMode.Replace,
+                        HttpMethod = "POST",
+                        UpdateTargetId = "dvaddmanager"
+                    }))
+{
+
+    @Html.AntiForgeryToken()
+
+
+    <div class="modal fade" id="mdlAddManager" tabindex="-1" role="dialog" aria-labelledby="Add Manager" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add Manager to AD Group</h4>
+                </div>
+                <div class="modal-body">
+
+                    @Html.HiddenFor(r => r.addGrpID)
+
+                    <p><strong>Group Name: </strong><span id="spnaddgrpname"></span></p>
+
+                    <p>
+                        <strong>User ID or Email Address of Manager to Add:</strong>
+                        @Html.TextBoxFor(r => r.addMgrID, new { @class = "coeInputsMx" })
+                    </p>
+
+                    
+                    <div id="dvaddmanager" class="coeErrorStrong"></div>
+                    <br />
+                    <button type="submit" name="btn1" value="Add" class="btn btn-default coeInputs">Add Manager</button>
+                    <button type="button" class="btn btn-default coeInputs" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}

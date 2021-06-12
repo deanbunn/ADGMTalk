@@ -1,0 +1,41 @@
+﻿@model COEADGroupManager.Models.ManagersDeleteManagerViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@using(Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="row">
+
+        <div class="col-md-9 col-lg-7">
+
+            <h4 class="coeh4">Remove AD Group Manager</h4>
+            <br />
+
+
+            @if(String.IsNullOrEmpty(Model.dmStatus))
+            {
+                <p>Do you want to completely delete manager @Model.agmManager.DisplayName (@Model.agmManager.KerbID) from the system?</p>
+                @Html.HiddenFor(r => r.delMgrID)
+                <br />
+                <button type="submit" name="btn1" value="Remove" class="btn btn-default coeInputs">Yes Delete Manager</button>
+                <span>&nbsp;</span>
+                @Html.ActionLink("Cancel", "list", "managers", null, new { @class = "btn btn-default" })
+            }
+            else
+            {
+                <br />
+                <br />
+                <p>@Model.dmStatus</p>
+            }
+
+        </div>
+
+
+    </div>
+    
+}

@@ -1,0 +1,78 @@
+﻿@model COEADGroupManager.Models.MembersAddMemberViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+
+    if (String.IsNullOrEmpty(Model.amStatus))
+    {
+
+
+            <div class="row">
+
+                <div class="col-md-10 col-lg-8">
+
+
+                    <h4 class="coeH4">Add Member(s) to @Model.agmGroup.ADGrpName</h4>
+                    <br />
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-7 col-lg-4">
+
+
+                        <strong>Members to Add</strong><small> One user ID or email address per line</small>
+                        @Html.TextAreaFor(r => r.nUsers, 5, 50, new { @class = "coeInputsMx coeTxtArea", @maxlength = 12000 })
+               
+                        <div id="acpu" class="coeErrorStrong">
+
+                            @if (Model.lErrorMsgs != null && Model.lErrorMsgs.Count > 0)
+                            {
+
+                                <span>The request couldn't be processed due the following errors:</span>
+                                <br />
+
+                                foreach (var errmsg in Model.lErrorMsgs)
+                                {
+                                    @errmsg <br />
+                                }
+                            }
+
+                        </div>
+                        <br />
+                        <button type="submit" name="btn1" value="Add" class="btn btn-default coeInputs">Submit</button>
+                        <span>&nbsp;</span>
+                        @Html.ActionLink("Back to Member Listing", "List", "Members", new { grpguid = Model.agmGroup.AGMGID.ToString() }, new { @class = "btn btn-default" })
+
+           
+                </div>
+
+            </div>
+
+    }
+    else
+    {
+        <div class="row">
+
+            <div class="col-md-8 col-lg-6">
+                <p>@Model.amStatus</p>
+                @Html.ActionLink("Back to Group Listing", "Index", "Home", null, new { @class = "btn btn-default" })
+
+            </div>
+
+        </div>
+       
+    }
+
+}

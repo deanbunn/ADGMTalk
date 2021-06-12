@@ -1,0 +1,50 @@
+﻿@model COEADGroupManager.Models.MembersBulkRemoveViewModel
+
+@using (Ajax.BeginForm("bulkremove", "members", FormMethod.Post,
+                                new AjaxOptions
+                                {
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "POST",
+                                    UpdateTargetId = "dvremovebulki"
+                                }))
+{
+
+    @Html.AntiForgeryToken()
+
+    if (Model.lUGMSI != null && Model.lUGMSI.Count() > 0)
+    {
+
+        for (int j = 0; j < Model.lUGMSI.Count(); j++)
+        {
+
+            @Html.CheckBoxFor(m => m.lUGMSI[j].Selected, new { @class = "coeInputs coeSelChkr" })
+
+            <span>
+                &nbsp;
+                @Model.lUGMSI[j].DisplayName
+                &nbsp;
+                (@Model.lUGMSI[j].LoginID)
+            </span>
+
+            @Html.HiddenFor(m => m.lUGMSI[j].LoginID)
+
+
+            <br />
+        }
+
+        
+
+    }
+    else
+    {
+        <p>All users have been removed or pending removal</p>
+    }
+
+    <br />
+    <div id="dvremovebulki" class="coeErrorStrong"></div>
+    <br />
+    <button type="submit" name="btn16" value="RemoveUsers" class="btn btn-default coeInputs">Remove Selected Users</button>
+    <button type="button" class="btn btn-default coeInputs" data-dismiss="modal">Cancel</button>
+                
+
+}

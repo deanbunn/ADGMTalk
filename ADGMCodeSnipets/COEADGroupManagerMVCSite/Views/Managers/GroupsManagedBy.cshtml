@@ -1,0 +1,50 @@
+﻿@model COEADGroupManager.Models.ManagersGroupsManagedByViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-md-9 col-lg-7">
+
+        @if (String.IsNullOrEmpty(Model.mbStatus))
+        {
+            <h4 class="coeH4">AD Groups Managed by @Model.agmManager.DisplayName <span> (@Model.agmManager.KerbID)</span></h4>
+            <br />
+            
+            if(Model.agmManager.AGMGroups != null && Model.agmManager.AGMGroups.Count() > 0)
+            {
+                <ul>
+
+                    @foreach(var agmGroup in Model.agmManager.AGMGroups.OrderBy(r => r.ADGrpName))
+                    {
+                        <li>@Html.ActionLink(agmGroup.ADGrpName,"grouplist","managers", new{grpguid = agmGroup.AGMGID.ToString()}, null)</li>
+                    }
+
+                </ul>
+            }
+            else
+            {
+                <p>This manager has no assigned groups</p>
+            }
+
+        }
+        else
+        {
+            <p>@Model.mbStatus</p>
+        }
+
+        <br />
+        <br />
+
+        @Html.ActionLink("Back to Manager Listing", "list", "managers", null, new { @class = "btn btn-default" })
+
+    </div>
+
+
+
+
+
+</div>

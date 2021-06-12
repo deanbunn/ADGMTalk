@@ -1,0 +1,95 @@
+﻿@model COEADGroupManager.Models.ReportConfigureManagerViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+
+        <div class="col-md-10 col-lg-7">
+
+            <h4 class="coeH4">Configure Manager Report Settings</h4>
+            <br />
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-10 col-lg-6">
+
+            @if (String.IsNullOrEmpty(Model.rcmStatus))
+            {
+                <p>
+                    <strong>Manager: </strong>@Model.agmManager.DisplayName <span>(@Model.agmManager.KerbID)</span>
+                </p>
+
+                <p>
+                    <label for="bSendReport"><strong>Send Manager "All Groups" Report Instead of Individual Group Reports: </strong></label>
+                    @Html.CheckBoxFor(r => r.bSendReport, new { @class = "coeInputs" })
+                </p>
+                
+                <p>
+                    <label for="nDaysBetween"><strong>Send "All Groups" Report Every </strong></label>
+
+                    @Html.DropDownListFor(x => x.nDaysBetween,
+                                          new[]
+                                          {
+                                              new SelectListItem() {Text="30",Value="30"},
+                                              new SelectListItem() {Text="45",Value="45"},
+                                              new SelectListItem() {Text="60",Value="60"},
+                                              new SelectListItem() {Text="90",Value="90"},
+                                              new SelectListItem() {Text="120",Value="120"},
+                                              new SelectListItem() {Text="180",Value="180"}
+
+                                          }, new { @class = "coeInputs" })
+
+                    <strong> Days</strong>
+                </p>
+
+                <p>
+                    <label for="bRprtTime"><strong>Reset Report Wait Time (Sends Report Next Cycle): </strong></label>
+                    @Html.CheckBoxFor(r => r.bRprtTime, new { @class = "coeInputs" })
+                </p>
+
+                <p>
+                    <strong>Last "All Groups" Report Sent On: </strong>
+                    @if (Model.agmManager.RptLastSent != null && Model.agmManager.RptLastSent.HasValue)
+                    {
+                        <span>@Model.agmManager.RptLastSent.Value.ToShortDateString()</span>
+                    }
+                </p>
+
+
+                if (!ViewData.ModelState.IsValid)
+                {
+                    @Html.ValidationSummary()
+                    <br />
+                }
+                
+                <button type="submit" name="btn1" value="UpdateReport" class="btn btn-default coeInputs">Update</button>
+
+                @Html.ActionLink("Cancel", "List", "Managers", null, new { @class = "btn btn-default" })
+
+            }
+            else
+            {
+                <p>@Model.rcmStatus</p>
+            }
+
+
+        </div>
+
+    </div>
+
+    
+    
+
+}

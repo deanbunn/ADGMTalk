@@ -1,0 +1,182 @@
+﻿@model COEADGroupManager.Models.HomeIndexViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-md-12 col-lg-12">
+
+        <h4 class="coeH4">AD Group Management</h4>
+        <br />
+       
+    </div>
+
+</div>
+
+
+@if (User.IsInRole("ADGMAdmin") || User.IsInRole("ADGMPartner"))
+{
+
+    <div class="row">
+
+        <div class="col-md-12 col-lg-12">
+
+            @if (Model.lAGMGroups != null && Model.lAGMGroups.Count > 0)
+            {
+
+                <table id="tblADGMGroups" class="table table-striped table-bordered table-condensed">
+
+                    <thead>
+                        <tr>
+                            <th class="text-left"><strong>Managed AD Group</strong></th>
+                            <th class="text-left"><strong>Description</strong></th>
+                            <th class="text-center"><strong>Last Configured</strong></th>
+                            <th class="text-center"><strong>Configure</strong></th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var mgrp in Model.lAGMGroups)
+                        {
+                            <tr>
+                                <td class="text-left">@mgrp.ADGrpName</td>
+                                <td class="text-left">@mgrp.GrpDescription</td>
+                                <td class="text-center">@mgrp.ModifiedOn.Value.ToString("MM/dd/yyyy hh:mm tt")</td>
+                                <td class="text-center">
+                                   <span> 
+                                            @Html.ActionLink("Membership", "list", "members", new { grpguid = mgrp.AGMGID.ToString() }, null)   
+                                          | @Html.ActionLink("Managers", "grouplist", "managers", new { grpguid = mgrp.AGMGID.ToString() }, null) 
+                                          | @Html.ActionLink("Reporting & Limits", "configure", "report", new { grpguid = mgrp.AGMGID.ToString() }, null) 
+                                          | @Html.ActionLink("Remove", "requestfor", "removegroup", new { grpguid = mgrp.AGMGID.ToString() }, null)
+                                   </span>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            }
+            
+            @Html.ActionLink("Add Managed Group", "Index", "AddGroup", null, new { @class = "btn btn-default" })
+           
+        </div>
+
+
+    </div>
+    
+   
+    <script type="text/javascript">
+
+        //Check to See If Table Exists
+        if ($('#tblADGMGroups').length > 0) {
+
+            //If So Format as dataTable
+            //"bLengthChange": false,
+            $('#tblADGMGroups').dataTable({
+
+                "bAutoWidth": false,
+
+                "columns": [
+                    { "type": "string" },
+                    { "type": "string", "width": "20%" },
+                    { "type": "date"},
+                    { "type": "string", "orderable": false, "searchable": false}
+                ],
+                "deferRender": true,
+                "order": [[2, 'desc']]
+            });
+        }
+
+
+    </script>
+
+}
+else
+{
+    
+    <div class="row">
+
+        <div class="col-md-12 col-lg-12">
+
+            @if (Model.lAGMGroups != null && Model.lAGMGroups.Count > 0)
+            {
+
+                <table id="tblADGMGroups" class="table table-striped table-bordered">
+
+                    <thead>
+                        <tr>
+                            <th class="text-left"><strong>Managed AD Group</strong></th>
+                            <th class="text-left"><strong>Description</strong></th>
+                            <th class="text-center"><strong>Last Configured</strong></th>
+                            <th class="text-center"><strong>Action</strong></th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var mgrp in Model.lAGMGroups)
+                        {
+                            <tr>
+                                <td class="text-left">@mgrp.ADGrpName</td>
+                                <td class="text-left">@mgrp.GrpDescription</td>
+                                <td class="text-center">@mgrp.ModifiedOn.Value.ToString("MM/dd/yyyy hh:mm tt")</td>
+                                <td class="text-center">@Html.ActionLink("Edit Membership", "list", "members", new { grpguid = mgrp.AGMGID.ToString() }, null)</td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+
+            }
+            else
+            {
+                <p>This site is designed to allow COE members the ability to manager the membership of their own AD access groups.</p>
+                <br />
+                <p>Currently, your account is not configured as a manager of any AD groups.</p>
+            }
+
+        </div>
+
+
+    </div>
+    
+  
+    <script type="text/javascript">
+
+        //Check to See If Table Exists
+        if ($('#tblADGMGroups').length > 0) {
+
+            //If So Format as dataTable 
+            //"bLengthChange": false,
+
+            $('#tblADGMGroups').dataTable({
+
+                "bAutoWidth": false,
+
+                "columns": [
+                    { "type": "string" },
+                    { "type": "string", "width": "40%" },
+                    { "type": "date" },
+                    { "type": "string", "width": "10%", "orderable": false, "searchable": false}
+                ],
+
+                "order": [[2, 'desc']]
+            });
+        }
+
+
+    </script>
+
+}
+

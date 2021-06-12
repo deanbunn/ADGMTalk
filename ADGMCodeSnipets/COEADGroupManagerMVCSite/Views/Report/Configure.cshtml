@@ -1,0 +1,204 @@
+﻿@model COEADGroupManager.Models.ReportConfigureViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@using(Html.BeginForm())
+{
+    
+    @Html.AntiForgeryToken()
+    
+    <div class="row">
+
+        <div class="col-md-10 col-lg-7">
+
+            <h4 class="coeH4">Configure Reporting &amp; Limit Settings</h4>
+            <br />
+
+        </div>
+
+    </div>
+    
+    <div class="row">
+
+        <div class="col-md-12 col-lg-10">
+
+            @if (String.IsNullOrEmpty(Model.rcStatus))
+            {
+                <p>
+                    <strong>AD Group: </strong>@Model.agmGroup.ADGrpName
+                </p>
+
+                <p>
+                    <label for="bSendReport"><strong>Turn On Reporting: </strong></label>
+                    @Html.CheckBoxFor(r => r.bSendReport, new { @class = "coeInputs" })
+                </p>
+
+
+
+                <p>
+                    <label for="bSendToManagers"><strong>Send Reports to Managers: </strong></label>
+                    @Html.CheckBoxFor(r => r.bSendToManagers, new { @class = "coeInputs" })
+                </p>
+
+                <p>
+                    <label for="addrRptSentTo"><strong>And\Or Send Reports To: </strong></label> @Html.TextBoxFor(x => x.addrRptSentTo, new { @class = "coeInputs coe25W" })
+                </p>
+
+                <p>
+                    <label for="nDaysBetween"><strong>Send Group Report Every </strong></label>
+
+                    @Html.DropDownListFor(x => x.nDaysBetween,
+                                          new[]
+                                          {
+                                              new SelectListItem() {Text="30",Value="30"},
+                                              new SelectListItem() {Text="45",Value="45"},
+                                              new SelectListItem() {Text="60",Value="60"},
+                                              new SelectListItem() {Text="90",Value="90"},
+                                              new SelectListItem() {Text="120",Value="120"},
+                                              new SelectListItem() {Text="180",Value="180"}
+
+                                          }, new { @class = "coeInputs" })
+
+                    <strong> Days</strong>
+                </p>
+
+                <p>
+                    <label for="bSendHTMLReport"><strong>Send Group Report as HTML: </strong></label>
+                    @Html.CheckBoxFor(r => r.bSendHTMLReport, new { @class = "coeInputs" })
+                </p>
+
+                <p>
+                    <strong>Last Group Report Sent On: </strong>
+                    @if (Model.agmGroup.MngrNtcLastSent != null && Model.agmGroup.MngrNtcLastSent.HasValue)
+                    {
+                        <span>@Model.agmGroup.MngrNtcLastSent.Value.ToShortDateString()</span>
+                    }
+                </p>
+
+                <p>
+                    <label for="bSendProvReport"><strong>Send Provisioning Completion Notices: </strong></label>
+                    @Html.CheckBoxFor(r => r.bSendProvReport, new { @class = "coeInputs" })
+                </p>
+
+                <p>
+                    <label for="bAD3AdminOnly"><strong>Only Allow AD3 Admin Accounts: </strong></label>
+                    @Html.CheckBoxFor(r => r.bAD3AdminOnly, new { @class = "coeInputs" })
+                </p>
+
+                <p>
+                    <label for="bLimitMbr"><strong>Limit Membership: </strong></label>
+                    @Html.CheckBoxFor(r => r.bLimitMbr, new { @class = "coeInputs" })
+                </p>
+
+                <p>
+                    <label for="nLimitMb"><strong>Max Nested Membership Count: </strong></label>
+                    @Html.TextBoxFor(x => x.nLimitMbr, new { @class = "coeInputs coe10W" })
+
+                </p>
+
+                <p>
+                    <label for="bGrpDescptAD"><strong>Sync Group Description from AD: </strong></label>
+                    @Html.CheckBoxFor(r => r.bGrpDescptAD, new { @class = "coeInputs" })
+                </p>
+
+                <p>
+                    <label for="cfgGrpDescpt"><strong>Group Description: </strong></label>@Html.TextBoxFor(x => x.cfgGrpDescpt, new { @class = "coeInputs coe50W" })
+
+                    
+
+                </p>
+
+                <br />
+
+                if (!ViewData.ModelState.IsValid)
+                {
+                    @Html.ValidationSummary()
+                    <br />
+                }
+
+                <button type="submit" name="btn1" value="UpdateReport" class="btn btn-default coeInputs">Update</button>
+
+                <button type="button" id="btnSR" value="@Model.agmGroup.AGMGID.ToString()" class="btn btn-default coeInputs">Send Me Example Reports</button>
+
+                @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn btn-default" })
+
+            }
+            else
+            {
+                <p>@Model.rcStatus</p>
+            }
+
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="mdlSendReports" tabindex="-1" role="dialog" aria-labelledby="Send ADGM Reports" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Send ADGM Reports</h4>
+                </div>
+                <div class="modal-body">
+
+                    <br />
+
+                    <div id="dvSendAGMReports">
+
+                    </div>
+
+                    <br />
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-default coeInputs" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+    $(document).ready(function () {
+
+        if ($('#btnSR').length > 0) {
+
+            $('#btnSR').click(function () {
+
+                var vgrpid = $('#btnSR').val();
+                var viewURL = '/report/sendgrpreports/' + vgrpid;
+
+                    $('#dvSendAGMReports').html('<p class="coeInputs"><strong>Compiling reports &nbsp; </strong><img alt="loading" src="@Url.Content("~/Images/coe_loading.gif")" /></p>');
+
+                    $.ajax({
+                        url: viewURL,
+                        error: function () {
+                            $('#dvSendAGMReports').html('<p>An Error Occurred</p>');
+                        },
+                        success: function (data) {
+                            $('#dvSendAGMReports').html(data);
+                        }
+                    });
+
+                    $('#mdlSendReports').modal('show');
+
+                    return false;
+
+                });
+        }
+
+        
+       
+
+    });
+
+</script>
+    
+    
+}
+

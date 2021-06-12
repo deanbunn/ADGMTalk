@@ -1,0 +1,40 @@
+﻿@model COEADGroupManager.Models.MembersRemoveMemberViewModel
+
+@using (Ajax.BeginForm("removemember", "members", FormMethod.Post,
+                    new AjaxOptions
+                    {
+                        InsertionMode = InsertionMode.Replace,
+                        HttpMethod = "POST",
+                        UpdateTargetId = "dvremovembr"
+                    }))
+{
+
+    @Html.AntiForgeryToken()
+
+
+    <div class="modal fade" id="mdlRemoveMember" tabindex="-1" role="dialog" aria-labelledby="Remove Member" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Remove User from AD Group</h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <p><strong>Group Name: </strong><span id="spnrmgrpname"></span></p>
+                    <p><strong>Remove User: </strong><span id="spnrmusrname"></span></p>
+                    
+                    @Html.HiddenFor(r => r.rmvGrpID)
+                    @Html.HiddenFor(r => r.rmvUserID)
+                    
+                    <div id="dvremovembr" class="coeErrorStrong"></div>
+                    <br />
+                    <button type="submit" name="btn1" value="Remove" class="btn btn-default coeInputs">Remove User</button>
+                    <button type="button" class="btn btn-default coeInputs" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}

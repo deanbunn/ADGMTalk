@@ -1,0 +1,90 @@
+﻿@model COEADGroupManager.Models.AddGroupIndexViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+
+        <div class="col-md-10 col-lg-10">
+
+            <h4 class="coeH4">Add AD Managed Group</h4>
+
+            <br />
+
+            <strong>View Groups in </strong>
+
+            @Html.DropDownListFor(x => x.srchDomain,
+                                       new[]
+                                       {
+                                          new SelectListItem() {Text="XXX",Value="xxxx"}
+                                       }, new { @class = "coeInputs" })
+            <span><strong> Named </strong></span>
+            @Html.TextBoxFor(x => x.srchName, new { @class = "coeInputs coe30W", maxlength = 100 })
+            <input type="submit" value="View" /> <span>&nbsp; </span>
+            @Html.ValidationMessageFor(x => x.srchName)
+
+            <br />
+            <br />
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-10 col-lg-8">
+
+            @if (Model.adGrpCol != null)
+            {
+
+                if (Model.adGrpCol.lADGMGrpSrchResults.Count > 0)
+                {
+                    <p>*Maximum number of results is set to 30. If you don't see your group, make sure extensionAttribute2 is set to "COEADGM"</p>
+                    <br />
+                    <table class="table table-condensed table-bordered">
+                        <tr>
+                            <td class="text-center"><strong>Common Name</strong></td>
+                            <td class="text-center"><strong>Display Name</strong></td>
+                            <td class="text-center coe20W"><strong>Action</strong></td>
+                        </tr>
+
+                        @foreach (var ladgp in Model.adGrpCol.lADGMGrpSrchResults)
+                        {
+                            <tr>
+
+                                <td class="text-center">@ladgp.GrpCN</td>
+                                <td class="text-center">@ladgp.GrpDisplayName</td>
+
+                                @if (ladgp.GrpExistingStatus == false)
+                                {
+                                    <td class="text-center coe20W">
+                                        @Html.ActionLink("Add", "NewADGMGroup", "AddGroup", new { grpguid = ladgp.GrpGuid }, null)
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="text-center coe20W">&nbsp;</td>
+                                }
+
+                            </tr>
+                        }
+                    </table>
+                }
+                else
+                {
+                    <p>No results found using that name</p>
+                }//End Groups Count
+
+            }
+
+        </div>
+    </div>
+
+}

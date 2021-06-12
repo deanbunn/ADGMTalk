@@ -1,0 +1,207 @@
+﻿@model COEADGroupManager.Models.MembersGetMembersViewModel
+
+
+
+@if (String.IsNullOrEmpty(Model.gmStatus))
+{
+
+    if (Model.lUCGM != null && Model.lUCGM.Count > 0)
+    {
+        
+        <table id="tblGrpMembers" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center"><strong>User ID</strong></th>
+                    <th class="text-center"><strong>Display Name</strong></th>
+                    <th class="text-center"><strong>Email Address</strong></th>
+                    <th class="text-center"><strong>Action</strong></th>
+                    <th class="text-center"><strong>Submitted On</strong></th>
+                </tr>
+            </thead>
+
+            
+            
+            <tbody>
+
+                @for(int m = 0; m < Model.lUCGM.Count(); m++)
+                {
+                    <tr>
+                        <td class="text-center">@Model.lUCGM[m].LoginID</td>
+                        <td class="text-center">@Model.lUCGM[m].DisplayName</td>
+                        <td class="text-center">@Model.lUCGM[m].EmailAddress</td>
+
+                        @if(String.IsNullOrEmpty(Model.lUCGM[m].RequestStatus))
+                        {
+                           <td class="text-center">
+                               <a class="coemgremoveuser">Remove User</a>
+                               <input type="hidden" class="coemgrmvusrid" value="@Model.lUCGM[m].LoginID" />
+                               <input type="hidden" class="coemgrmvusrname" value="@Model.lUCGM[m].DisplayName" />
+                           </td>
+                        }
+                        else if(Model.lUCGM[m].RequestStatus == "Add")
+                        {
+                            <td class="text-center">Pending Add</td>
+                        }
+                        else if(Model.lUCGM[m].RequestStatus == "Remove")
+                        {
+                            <td class="text-center">Pending Removal</td>
+                        }     
+
+                        <td class="text-center">@Model.lUCGM[m].SubmittedOn</td>
+                    </tr>
+                }
+
+            </tbody>
+
+
+        </table>
+
+        
+        @*Modal for Bulk Remove Form*@
+        <div class="modal fade" id="mdlBulkRemove" tabindex="-1" role="dialog" aria-labelledby="ADGM Bulk Remove" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">ADGM Bulk Remove</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <p><strong>Select users to remove from @Model.agmGroup.ADGrpName</strong></p>
+
+                      
+                        <span id="spnCOESelChkr">All Members&nbsp;&nbsp;
+                            <input type="checkbox" id="cbSlctAll" class="coeInputs coeSelChkr">
+                        </span>
+
+                        <br />
+
+                        <div id="viewBulkRemoveFrm">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    }
+    else
+    {
+        <p>The query returned no AD3 users for this group.</p>
+    }
+    
+    @Html.ActionLink("Add Users", "AddMembers", "Members", new { grpguid = Model.agmGroup.AGMGID.ToString() }, new { @class = "btn btn-default" })
+
+
+    if (Model.bShowBulk == true)
+    {
+        <span>&nbsp;</span>
+        @Html.ActionLink("Export Member Listing", "CurrentMembersExport", "Members", new { grpguid = Model.agmGroup.AGMGID.ToString() }, new { @class = "btn btn-default" })
+
+        <span>&nbsp;</span>
+        <button id="btnBulk" class="btn btn-default" >Bulk Remove</button>
+    }
+
+    <span>&nbsp;</span>
+    @Html.ActionLink("Back to Group Listing", "Index", "Home", null, new { @class = "btn btn-default" })
+
+  
+    @Html.Action("RemoveMember")
+
+
+}
+else
+{
+    <p>@Model.gmStatus</p>
+    @Html.ActionLink("Back to Group Listing", "Index", "Home", null, new { @class = "btn btn-default" })
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //Check to See If Table Exists
+        if ($('#tblGrpMembers').length > 0) {
+
+            //If So Format as dataTable
+            $('#tblGrpMembers').dataTable({
+
+                "columns": [
+                               { "type": "string" },
+                               { "type": "string" },
+                               { "type": "string" },
+                               { "type": "string" },
+                               { "type": "date" }
+                ],
+
+                "deferRender": true,
+                "order": [[4, 'desc'], [1, 'asc']]
+            });
+
+            //View Remove User Modal Load Event
+            $('#tblGrpMembers tbody').on("click", "a.coemgremoveuser", function (event) {
+
+                //Vars for Input Values
+                var vrmusrid = $(this).parents('td').children('.coemgrmvusrid').val();  
+                var vrmusrname = $(this).parents('td').children('.coemgrmvusrname').val();
+                var vrmgrpid = $('#hdnGrpID').val();
+                var vrmgrpname = $('#hdnGrpName').val();
+                //Set Display and Input Vars
+                $('#spnrmusrname').html(vrmusrname + ' (' + vrmusrid + ')');
+                $('#spnrmgrpname').html(vrmgrpname);
+                $('#rmvUserID').val(vrmusrid);
+                $('#rmvGrpID').val(vrmgrpid);
+                
+                //Clear Error Message
+                $('#dvremovembr').html('');
+
+                $('#mdlRemoveMember').modal('show');
+
+                return false;
+            });
+
+
+            //Check to See If Bulk Button Exists
+            if ($('#btnBulk').length > 0) {
+
+                //View Bulk Remove Modal Load Event
+                $('#btnBulk').on('click', function (event) {
+
+                    $('#spnCOESelChkr').hide();
+
+                    var viewURL = '@Url.Action("BulkRemove", "Members", new { grpguid = Model.agmGroup.AGMGID.ToString() })';
+
+                    $('#viewBulkRemoveFrm').html('<p class="coeInputs"><strong>Pulling group membership &nbsp; </strong><img alt="loading" src="@Url.Content("~/Images/coe_loading.gif")" /></p>');
+
+                    $.ajax({
+                        url: viewURL,
+                        error: function () {
+                            $('#viewBulkRemoveFrm').html('<p>An Error Occurred</p>');
+                        },
+                        success: function (data) {
+                            $('#spnCOESelChkr').show();
+                            $('#viewBulkRemoveFrm').html(data);
+                        }
+                    });
+
+                    $('#mdlBulkRemove').modal('show');
+
+                    return false;
+                });
+
+                $('#cbSlctAll').click(function () {
+                    $(':checkbox.coeSelChkr').prop('checked', this.checked);
+                });
+
+            }
+
+            
+
+
+        }
+
+    });
+
+</script>

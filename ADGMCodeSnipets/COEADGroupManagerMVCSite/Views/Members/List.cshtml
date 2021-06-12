@@ -1,0 +1,87 @@
+﻿@model COEADGroupManager.Models.MembersListViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+    <div class="row">
+
+        <div class="col-md-12 col-lg-10">
+
+
+            @if (String.IsNullOrEmpty(Model.liStatus))
+            {
+
+                <h4 class="coeH4">Membership for @Model.agmGroup.ADGrpName</h4>
+                <br />
+
+                if (string.IsNullOrEmpty(Model.agmGroup.GrpDescription) == false)
+                {
+                    <p><strong>Description: </strong> @Model.agmGroup.GrpDescription</p>
+
+                    if((bool)Model.agmGroup.MbrshpLimited == false)
+                    {
+                        <br />
+                    }
+                }
+
+
+                if ((bool)Model.agmGroup.MbrshpLimited == true)
+                {
+                    <p><strong>Maximum Membership Count: @Model.agmGroup.MbrshpLimit </strong></p>
+                    <br />
+                }
+
+
+
+
+                <input type="hidden" id="hdnGrpID" value="@Model.agmGroup.AGMGID.ToString()" />
+                <input type="hidden" id="hdnGrpName" value="@Model.agmGroup.ADGrpName" />
+
+                <div id="dvGrpMembers">
+
+                </div>
+
+
+
+            }
+            else
+            {
+                <br />
+                <br />
+                <p>@Model.liStatus</p>
+                @Html.ActionLink("Back to Group Listing", "Index", "Home", null, new { @class = "btn btn-default" })
+            }
+
+        </div>
+
+    </div>
+   
+
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+            if ($('#hdnGrpID').length > 0) {
+
+                $('#dvGrpMembers').html('<br /><br /><p><strong>Querying current group membership &nbsp; </strong><img alt="loading" src="@Url.Content("~/Images/coe_loading.gif")" /></p>');
+
+                var vhdnid = $('#hdnGrpID').val();
+                var viewURL = '/members/getmembers/' + vhdnid;
+
+                $.ajax({
+                    url: viewURL,
+                    error: function () {
+                        $('#dvGrpMembers').html('<p>An error occurred retrieving information from Active Directory servers</p>');
+                    },
+                    success: function (data) {
+                        $('#dvGrpMembers').html(data)
+                    }
+                });
+
+            };
+
+        });
+
+</script>

@@ -1,0 +1,99 @@
+﻿@model COEADGroupManager.Models.RequestLogIndexViewModel
+
+@{
+    
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-md-11 col-lg-10">
+
+        <h4 class="coeH4">AD Group Membership Request Log</h4>
+
+        <br />
+
+        <div id="dvCOELoadNotice">
+
+        </div>
+
+        <div id="dvTblRequests" style="display: none;">
+
+            <table id="tblMBRRequests" class="table table-striped table-bordered">
+
+                <thead>
+                    <tr>
+                        <th class="text-center"><strong>Pending</strong></th>
+                        <th class="text-center"><strong>User ID</strong></th>
+                        <th class="text-center"><strong>Action</strong></th>
+                        <th class="text-center"><strong>Group</strong></th>
+                        <th class="text-center"><strong>Requestor</strong></th>
+                        <th class="text-center"><strong>Submitted On</strong></th>
+                    </tr>
+                </thead>
+
+                <tfoot>
+                    <tr>
+                        <th class="text-center"><strong>Pending</strong></th>
+                        <th class="text-center"><strong>User ID</strong></th>
+                        <th class="text-center"><strong>Action</strong></th>
+                        <th class="text-center"><strong>Group</strong></th>
+                        <th class="text-center"><strong>Requestor</strong></th>
+                        <th class="text-center"><strong>Submitted On</strong></th>
+                    </tr>
+                </tfoot>
+                
+                <tbody></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    //Check to See If Table Exists
+    $(document).ready(function ()  {
+
+        $('#dvCOELoadNotice').html('<br /><p>Pulling Membership Requests &nbsp; <img alt="loading" src="@Url.Content("~/Images/coe_loading.gif")" /></p>');
+
+        $.ajax({
+            url: '@Url.Action("loadobjects", "requestlog")',
+            dataType: "json",
+            error: function () {
+                console.log('load failed');
+                $('#dvCOELoadNotice').html('<br /><p>Load failed</p>');
+            },
+            success: function (rdata) {
+
+                $('#dvCOELoadNotice').html('');
+
+                $('#dvTblRequests').show();
+
+                $('#tblMBRRequests').dataTable({
+
+                    "data": rdata,
+                    "columns": [
+                        { "data": "pending", "type": "string", "className": "text-center" },
+                        { "data": "user_id", "type": "string", "className": "text-center" },
+                        { "data": "action", "type": "string", "className": "text-center" },
+                        { "data": "group", "type": "string", "className": "text-left" },
+                        { "data": "requestor", "type": "string", "className": "text-center" },
+                        { "data": "submitted_on", "type": "date", "className": "text-center" }
+                    ],
+
+                    "autoWidth": false,
+                    "pageLength": 10,
+                    "order": [[5, 'desc']]
+                });
+
+
+            }
+        });
+
+    });
+
+</script>
