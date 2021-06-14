@@ -19,7 +19,7 @@ Our unit started heavily using AD groups for access to cloud services, workstati
 
 ### Configuration
 
-- \.NET MVC website for submitting requests and configuring automation options
+- \.NET [MVC website](CodeSnipets/MVCWebsite/website.md) for submitting requests and configuring automation options
 - \.NET console application for processing requests and other automated tasks
 - MS SQL database for storing application data
 - Frontend application pool runs under a regular AD account\. No access to modify AD group membership
