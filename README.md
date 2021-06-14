@@ -49,7 +49,7 @@ Both admin and department admins will be presented a list of all the AD groups i
 
 #### Adding Managed Group
 
-Before an admin or department admin adds a group to the app, they have to set a certain value to an extension attribute on the AD group. This provides an extra level of security and ensures that only groups an admin feels comfortable having the membership modified by a web application are managed.  
+Before an admin or department admin adds a group to the app, they have to set a certain value on an extension attribute of the AD group. This provides an extra layer of security and ensures that only groups an admin feels comfortable having the membership modified by a web application are managed.  
 
 ![Adding Managed Group](Images/adgm_15.JPG)
 
