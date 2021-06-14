@@ -62,7 +62,7 @@ string adGroupFilter = "(&(objectclass=group)(extensionAttribute2=coeadgm)(|(gro
 
 #### Handling AD Group Moves or Name Changes
 
-To handle AD group moves or name changes the app uses the objectGUID value as the primary key. Since this value is unique across an Active Directory forrest, it guarantees the automated code will always be to pull the group object.
+To handle AD group moves or name changes, the app uses the objectGUID value as the primary key. Since this value is unique across an Active Directory forrest, it guarantees the automated code will always be to pull the group object.
 
 ```csharp
 //Var for Group's LDAP Path Based Upon AD GUID
