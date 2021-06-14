@@ -21,7 +21,7 @@ Our unit started heavily using AD groups for access to cloud services, workstati
 
 - \.NET MVC website for submitting requests and configuring automation options
 - \.NET console application for processing requests and other automated tasks
-- MSSQL database for storing application data
+- MS SQL database for storing application data
 - Frontend application pool runs under a regular AD account\. No access to modify AD group membership
 
 ### Features
@@ -108,7 +108,7 @@ For those managers that wanted one report for all their groups at once, we added
 
 #### Group Settings
 
-Fill this section out in the morning.
+Providing options each group\'s membership reporting, change notices, admin account restrictions, membership count, and group description allowed department admins a granular level of control and functionality.
 
 ![Group Settings](Images/adgm_09.JPG)
 
