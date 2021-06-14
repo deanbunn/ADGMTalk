@@ -65,7 +65,26 @@ Add members feature should allow managers to submit a list of new members. We ch
 
 ![Adding Members](Images/adgm_04.JPG)
 
-#### Buld Removes
+#### Directory Search
+
+Managers might not know the user ID or email address of the member, so we added a directory search feature.
+
+![Directory Search](Images/adgm_12.JPG)
+
+#### Bulk Removes
+
+Besides having a way to remove an individual user, managers quickly requested the ability to remove all members, or numerous users, in one submission.
+
+![Bulk Removes](Images/adgm_05.JPG)
+
+#### Membership Reports and Change Notifications
+
+
+
+
+
+
+
 
 
 
