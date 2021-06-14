@@ -55,5 +55,18 @@ Managers only see a list of directly assigned groups they can manage.
 
 #### Changing Membership 
 
+When viewing a group's membership, managers can see current members and any pending requests. Requests are processed by a backend process that runs every few minutes. 
+
+![Changing Membership](Images/adgm_03.JPG)
+
+#### Adding Members
+
+Add members feature should allow managers to submit a list of new members. We chose to lookup users by user ID or email address \(or a mixture of both\)   
+
+![Adding Members](Images/adgm_04.JPG)
+
+#### Buld Removes
+
+
 
 
