@@ -47,6 +47,19 @@ Both admin and department admins will be presented a list of all the AD groups i
 
 ![Admin Group Listing](Images/adgm_01.JPG)
 
+#### Adding Managed Group
+
+Before an admin or department admin adds a group to the app, they have to set a certain value to an extension attribute on the AD group. This provides an extra level of security and ensures that only groups an admin feels comfortable having the membership modified by a web application are managed.  
+
+![Adding Managed Group](Images/adgm_15.JPG)
+
+AD search filter for universal group by name with extension attribute required
+```csharp
+//Configure AD Search Filter
+string adGroupFilter = "(&(objectclass=group)(extensionAttribute2=coeadgm)(|(groupType=8)(groupType=-2147483640))(|(displayName=" + srchGroupName + "*)" + "(cn=" + srchGroupName + "*)))";
+
+```
+
 #### Manager View
 
 Managers only see a list of directly assigned groups they can manage. 
