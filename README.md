@@ -85,19 +85,38 @@ Reporting of group membership can be configured by the individual group or by th
 
 As an added security feature, a group can be configured to send completion notices after membership requests are processed. Notices go out to all managers of the group and if selected an additional email address.
 
-![Change Notifications](Images/adgm_13.JGP)
+![Change Notifications](Images/adgm_13.JPG)
 
 #### Managers Listing
 
+The managers listing allows admins and department admins a quick way to view all managers and their manage group count. Links are provided to display their associated groups and change a manager\'s reporting settings.
+
+![Managers Listing](Images/adgm_07.JPG)
 
 #### Manager\'s Groups
 
+Showing a view of all the groups a manager became essential when auditing access permissions and adding additional managers.
+
+![Manager Groups](Images/adgm_08.JPG)
 
 #### Manager Report Settings
 
+For those managers that wanted one report for all their groups at once, we added options for amount of days between reports and to reset the report timer.
+
+![Manager Report Settings](Images/adgm_11.JPG)
+
+
 #### Group Settings
 
+Fill this section out in the morning.
+
+![Group Settings](Images/adgm_09.JPG)
+
 #### Membership Request Log
+
+Having a quickly searchable log of all membership requests \(with who requested them and the time completed\) processed by the application assisted with support tickets for onboarding, offboarding, and access issues.  
+
+![Membership Request Log](Images/adgm_10.JPG)
 
 
 
