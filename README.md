@@ -79,13 +79,25 @@ Besides having a way to remove an individual user, managers quickly requested th
 
 #### Membership Reports and Change Notifications
 
+Reporting of group membership can be configured by the individual group or by the manager \(receives all their managed groups memberships at once\).  
+
+![Membership Reports](Images/adgm_14.JPG)
+
+As an added security feature, a group can be configured to send completion notices after membership requests are processed. Notices go out to all managers of the group and if selected an additional email address.
+
+![Change Notifications](Images/adgm_13.JGP)
+
+#### Managers Listing
 
 
+#### Manager\'s Groups
 
 
+#### Manager Report Settings
 
+#### Group Settings
 
-
+#### Membership Request Log
 
 
 
